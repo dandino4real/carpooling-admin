@@ -343,6 +343,16 @@ class ApiClient {
   }
 
   /**
+   * Send an invite to a new admin
+   */
+  async sendAdminInvite(data: { email: string; firstName: string; lastName: string; adminRole: string }): Promise<{ message: string; userId: string }> {
+    return this.request('/admin/invite', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  /**
    * Accept an admin invite — set password
    */
   async acceptInvite(token: string, password: string): Promise<{ message: string }> {

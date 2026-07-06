@@ -101,7 +101,7 @@ export default function UsersPage() {
   const [newAdminFirstName, setNewAdminFirstName] = useState('');
   const [newAdminLastName, setNewAdminLastName] = useState('');
   const [newAdminEmail, setNewAdminEmail] = useState('');
-  const [newAdminPassword, setNewAdminPassword] = useState('');
+
   const [newAdminRole, setNewAdminRole] = useState('ADMIN');
   const [creatingAdmin, setCreatingAdmin] = useState(false);
   const [createAdminError, setCreateAdminError] = useState('');
@@ -170,17 +170,26 @@ export default function UsersPage() {
     toast.success(`Exported ${toExport.length} user(s) to CSV`);
   };
 
-  const handleCreateAdmin = (e: React.FormEvent) => {
+  const handleCreateAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newAdminFirstName || !newAdminLastName || !newAdminEmail || !newAdminPassword) {
+    if (!newAdminFirstName || !newAdminLastName || !newAdminEmail) {
       setCreateAdminError('All fields are required.'); return;
     }
     setCreatingAdmin(true); setCreateAdminError('');
-    setTimeout(() => {
+    try {
+      await api.sendAdminInvite({
+        firstName: newAdminFirstName,
+        lastName: newAdminLastName,
+        email: newAdminEmail,
+        adminRole: newAdminRole
+      });
+      toast.success(`Invitation sent to ${newAdminEmail}`);
+      setNewAdminFirstName(''); setNewAdminLastName(''); setNewAdminEmail(''); setNewAdminRole('ADMIN'); setShowCreateAdminModal(false); refetch();
+    } catch (err: any) {
+      setCreateAdminError(err.message || 'Failed to send invitation');
+    } finally {
       setCreatingAdmin(false);
-      toast.success(`New admin (${newAdminFirstName} ${newAdminLastName}) created as ${newAdminRole}.`);
-      setNewAdminFirstName(''); setNewAdminLastName(''); setNewAdminEmail(''); setNewAdminPassword(''); setNewAdminRole('ADMIN'); setShowCreateAdminModal(false); refetch();
-    }, 1500);
+    }
   };
 
   const openUserProfile = async (u: User) => {
@@ -856,10 +865,7 @@ export default function UsersPage() {
                   <label className="block text-[10px] uppercase font-mono text-slate-500 font-bold">Email Address</label>
                   <input type="email" required placeholder="e.g. support@platform.com" value={newAdminEmail} onChange={e => setNewAdminEmail(e.target.value)} className="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-purple-500" />
                 </div>
-                <div className="space-y-1">
-                  <label className="block text-[10px] uppercase font-mono text-slate-500 font-bold">Password</label>
-                  <input type="password" required placeholder="Min. 8 characters" value={newAdminPassword} onChange={e => setNewAdminPassword(e.target.value)} className="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-purple-500" />
-                </div>
+
                 <div className="space-y-1">
                   <label className="block text-[10px] uppercase font-mono text-slate-500 font-bold">Admin Role</label>
                   <select value={newAdminRole} onChange={e => setNewAdminRole(e.target.value)} className="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-purple-500">
