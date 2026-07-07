@@ -410,15 +410,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Sidebar — h-screen + overflow-hidden keeps footer always pinned, nav scrolls internally */}
       <aside className={`h-screen border-r border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-900/20 flex flex-col shrink-0 transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-16'}`}>
         {/* Brand */}
-        <div className="h-16 border-b border-slate-200 dark:border-slate-900 flex items-center px-3 gap-2 overflow-hidden shrink-0">
+        <div className={`h-16 border-b border-slate-200 dark:border-slate-900 flex items-center overflow-hidden shrink-0 transition-all duration-300 ${sidebarOpen ? 'px-3 gap-2' : 'justify-center'}`}>
           {/* Logo mark */}
-          <div className="w-40 h-16 shrink-0 flex items-center justify-start ml-2">
-            <img src="/images/logo-light.png" alt="RidePal Logo" className="w-full h-full object-contain scale-[3] origin-center block dark:hidden" />
-            <img src="/images/logo-dark.png" alt="RidePal Logo" className="w-full h-full object-contain scale-[3] origin-center hidden dark:block" />
-          </div>
+          {sidebarOpen && (
+            <div className="w-40 h-16 shrink-0 flex items-center justify-start ml-2">
+              <img src="/images/logo-light.png" alt="RidePal Logo" className="w-full h-full object-contain scale-[3] origin-center block dark:hidden" />
+              <img src="/images/logo-dark.png" alt="RidePal Logo" className="w-full h-full object-contain scale-[3] origin-center hidden dark:block" />
+            </div>
+          )}
 
           {/* App name + role removed per request */}
-          <div className="flex-1 min-w-0"></div>
+          {sidebarOpen && <div className="flex-1 min-w-0"></div>}
 
           {/* ── Explicit sidebar toggle button ── */}
           <div className="relative group shrink-0">

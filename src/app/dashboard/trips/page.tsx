@@ -610,11 +610,11 @@ export default function TripsPage() {
                     
                     {/* Route */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span className="inline-flex px-2 py-0.5 rounded text-[9px] font-bold uppercase font-mono border bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-white/10">
+                      <div className="flex items-center gap-2 mb-1.5 flex-nowrap overflow-hidden">
+                        <span className="shrink-0 inline-flex px-2 py-0.5 rounded text-[9px] font-bold uppercase font-mono border bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-white/10">
                           {isInter ? 'Inter' : 'Intra'}
                         </span>
-                        <span className="text-[10px] text-slate-500 font-mono tracking-widest">{formatDate(t.departureTime)}</span>
+                        <span className="text-[10px] text-slate-500 font-mono tracking-widest whitespace-nowrap truncate">{formatDate(t.departureTime)}</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
                         <span className="truncate">{t.originState}</span>
