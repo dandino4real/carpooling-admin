@@ -407,8 +407,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="h-screen overflow-hidden bg-slate-50 dark:bg-slate-950 flex text-slate-800 dark:text-slate-100 font-sans transition-colors duration-200">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-900/50 z-40 md:hidden transition-opacity"
+          onClick={toggleSidebar}
+        />
+      )}
+
       {/* Sidebar — h-screen + overflow-hidden keeps footer always pinned, nav scrolls internally */}
-      <aside className={`h-screen border-r border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-900/20 flex flex-col shrink-0 transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-16'}`}>
+      <aside className={`fixed md:relative z-50 h-screen border-r border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-900/20 flex flex-col shrink-0 transition-all duration-300 ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full md:translate-x-0 md:w-16'}`}>
         {/* Brand */}
         <div className={`h-16 border-b border-slate-200 dark:border-slate-900 flex items-center overflow-hidden shrink-0 transition-all duration-300 ${sidebarOpen ? 'px-3 gap-2' : 'justify-center'}`}>
           {/* Logo mark */}
@@ -535,6 +543,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         <Link
                           key={item.label}
                           href={item.href}
+                          onClick={() => {
+                            if (window.innerWidth < 768 && sidebarOpen) toggleSidebar();
+                          }}
                           className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors cursor-pointer ${
                             isActive
                               ? 'bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-400 border-l-2 border-indigo-500 pl-2.5'
@@ -561,6 +572,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {sidebarOpen ? (
             <Link
               href="/dashboard/profile"
+              onClick={() => {
+                if (window.innerWidth < 768 && sidebarOpen) toggleSidebar();
+              }}
               className="flex items-center gap-3 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-indigo-50/40 dark:hover:bg-indigo-950/20 group transition-all cursor-pointer shadow-sm"
             >
               {/* Avatar */}
